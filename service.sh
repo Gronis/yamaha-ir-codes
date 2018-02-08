@@ -1,6 +1,6 @@
 
 get_is_playing(){
-    STATUS=$(curl http://127.0.0.1/api/v1/getstate 2> /dev/null);
+    STATUS=$(curl http://127.0.0.1:3000/api/v1/getstate 2> /dev/null);
     STATUS=$(echo $STATUS | grep play);
     IS_PLAYING=${#STATUS};
     IS_PLAYING=$(($IS_PLAYING > 10 ? 1 : 0))
@@ -18,7 +18,7 @@ while true; do
     if [ $start_playing -eq 1 ]; then
         echo "started"
         irsend SEND_ONCE RECEIVER_2064_MAIN POWER_POWER_ON
-        sleep 0.1
+        sleep 2
         irsend SEND_ONCE RECEIVER_2064_MAIN INPUT_HDMI1
     fi
 
