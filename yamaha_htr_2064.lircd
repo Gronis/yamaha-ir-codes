@@ -1,6 +1,6 @@
 begin remote
 
-  name  RECEIVER_2067_ALL
+  name  RECEIVER_2064_ALL
   bits           32
   flags SPACE_ENC|CONST_LENGTH
   eps            30
@@ -16,16 +16,11 @@ begin remote
 
       begin codes
 
-            ZONE_CONTROL_PARTY_OFF         0x7E816C92
-            ZONE_CONTROL_PARTY_ON          0x7E81AC52
             PROGRAM_ENHANCER_AUTO          0x7E811BE4
             PROGRAM_2CH_STEREO             0x7E8103FC
             PROGRAM_ADVENTURE              0x7E81DF20
             PROGRAM_CELLAR_CLUB            0x7E81B34C
             PROGRAM_CHAMBER                0x7E81F50A
-            PROGRAM_CHURCH_IN_FREIBURG     0x7E8117E8
-            PROGRAM_CHURCH_IN_ROYAUMONT    0x7E819768
-            PROGRAM_RECITAL_OPERA          0x7E81AF50
             PROGRAM_EFFECT_ON              0x7E81E41B
             PROGRAM_MOVIE_STANDARD         0x7E817F80
             PROGRAM_ENHANCER_OFF           0x7E819B64
@@ -33,15 +28,12 @@ begin remote
             PROGRAM_DRAMA                  0x7E813FC0
             PROGRAM_HALL_IN_MUNICH         0x7E818778
             PROGRAM_HALL_IN_VIENNA         0x7E81A758
-            PROGRAM_HALL_IN_AMSTERDAM      0x7E816798
-            PROGRAM_VILLAGE_VANGUARD       0x7E81D728
             PROGRAM_THE_BOTTOM_LINE        0x7E8137C8
             PROGRAM_MONO_MOVIE             0x7E81EF10
             PROGRAM_MUSIC_VIDEO            0x7E81CF30
             PROGRAM_PURE_DIRECT_OFF        0x7E8141BE
             PROGRAM_PURE_DIRECT_ON         0x7E8101FE
             PROGRAM_THE_ROXY_THEATRE       0x7E81B748
-            PROGRAM_WAREHOUSE_LOFT         0x7E817788
             PROGRAM_ROLEPLAYING_GAME       0x7E81738C
             PROGRAM_SCI_FI                 0x7E815FA0
             PROGRAM_SPECTACLE              0x7E819F60
@@ -49,10 +41,6 @@ begin remote
             PROGRAM_SURROUND_DECODE_ON     0x7E81BF40
             PROGRAM_STRAIGHT               0x7E8107F8
             PROGRAM_7CH_STEREO             0x7E81FF00
-            OUTPUT_HDMI_OUT1               0x7E8104FA
-            OUTPUT_HDMI_OUT1AND2           0x7E8155AB
-            OUTPUT_HDMI_OUT2               0x7E81847A
-            OUTPUT_HDMI_OUT_OFF            0x7E8141BF
             MENU_ADAPTIVE_DRC_OFF          0x7E81AE50
             MENU_ADAPTIVE_DRC_ON           0x7E812ED0
             MENU_ADAPTIVE_DSP_OFF          0x7E81EE10
@@ -75,8 +63,6 @@ begin remote
             MENU_PRO_LOGIC                 0x7E81936C
             MENU_TRIGGER1_MANUAL_OFF       0x7E8102FC
             MENU_TRIGGER1_MANUAL_ON        0x7E81FC02
-            MENU_TRIGGER2_MANUAL_OFF       0x7E8142BC
-            MENU_TRIGGER2_MANUAL_ON        0x7E81827C
 # Power on for all zones
             POWER_POWER_ON                 0x5EA1B847
             POWER_SLEEP                    0x5EA1EA15
@@ -88,25 +74,10 @@ begin remote
             POWER_SLEEP_ON                 0x7E8158A6
 # Standby for all zones
             POWER_STANDBY                  0x5EA17887
-            INPUT_AUDIO_SEL_ANALOG         0x7E8155AA
-            INPUT_AUDIO_SEL_AUTO           0x7E81659A
-            INPUT_AUDIO_SEL_COAX_OPT       0x7E81956A
-            INPUT_AUDIO_SEL_HDMI           0x7E815BA4
-            DISPLAY_ASPECT_SMART_ZOOM      0x7E8144BA
-            DISPLAY_ASPECT_THROUGH         0x7E81C43A
-            ZONE_CONTROL_PARTY             0x5EA12CD3
             PROGRAM_ENHANCER               0x5EA129D6
-            PROGRAM_PROGRAM-               0x5EA19A65
-            PROGRAM_CLASSICAL              0x5EA151AE
-            PROGRAM_LIVE_CLUB              0x5EA1D12E
-            PROGRAM_ENTERTAIN              0x5EA131CE
-            PROGRAM_MOVIE2                 0x5EA1718E
-            PROGRAM_STEREO                 0x5EA1F10E
-            PROGRAM_PROGRAM+               0x5EA11AE5
             PROGRAM_PURE_DIRECT            0x5EA1BB44
             PROGRAM_STRAIGHT               0x5EA16A95
             PROGRAM_SURROUND_DECODE        0x5EA1B14E
-            OUTPUT_HDMI_OUT                0x5EA1AC53
             MENU_LEVEL                     0x5EA1619E
 # This code is disabled because it's possibly dangerous
 #            TEST_SELF_TEST1                0x5EA1FB04
@@ -118,7 +89,7 @@ end remote
 
 begin remote
 
-  name  RECEIVER_2067_MAIN
+  name  RECEIVER_2064_MAIN
   bits           32
   flags SPACE_ENC|CONST_LENGTH
   eps            30
@@ -134,32 +105,6 @@ begin remote
 
       begin codes
 
-            MEMORY_SCENE5                  0x5EA109F7
-            MEMORY_SCENE6                  0x5EA18977
-            MEMORY_SCENE7                  0x5EA149B7
-            MEMORY_SCENE8                  0x5EA1C937
-            MEMORY_SCENE9                  0x5EA129D7
-            MEMORY_SCENE10                 0x5EA1A957
-            MEMORY_SCENE11                 0x5EA16997
-            MEMORY_SCENE12                 0x5EA1E917
-            MEMORY_VIDEO_PRESET1           0x7E8125DB
-            MEMORY_VIDEO_PRESET2           0x7E81A55B
-            MEMORY_VIDEO_PRESET3           0x7E81659B
-            MEMORY_VIDEO_PRESET4           0x7E81E51B
-            MEMORY_VIDEO_PRESET5           0x7E8115EB
-            MEMORY_VIDEO_PRESET6           0x7E81956B
-            MEMORY_VOLUME_MEMORY1          0x7E81D629
-            MEMORY_VOLUME_MEMORY2          0x7E8136C9
-            MEMORY_VOLUME_MEMORY3          0x7E81B649
-            MEMORY_VOLUME_MEMORY4          0x7E817689
-            MEMORY_VOLUME_MEMORY5          0x7E81F609
-            MEMORY_VOLUME_MEMORY6          0x7E810EF1
-            MEMORY_VOLUME_RECALL1          0x7E81AE51
-            MEMORY_VOLUME_RECALL2          0x7E816E91
-            MEMORY_VOLUME_RECALL3          0x7E81EE11
-            MEMORY_VOLUME_RECALL4          0x7E811EE1
-            MEMORY_VOLUME_RECALL5          0x7E819E61
-            MEMORY_VOLUME_RECALL6          0x7E815EA1
             VOLUME_MUTE_OFF                0x7E81C53A
             VOLUME_MUTE_ON_-20DB           0x7E81FB04
             VOLUME_MUTE_ON_-40DB           0x7E81C638
@@ -168,14 +113,6 @@ begin remote
             POWER_SLEEP_OFF                0x7E81D826
             POWER_SLEEP_ON                 0x7E816896
             POWER_STANDBY                  0x7E81FE01
-# Will turn on receiver in standby
-            MEMORY_SCENE1                  0x5EA100FE
-# Will turn on receiver in standby
-            MEMORY_SCENE2                  0x5EA1C03E
-# Will turn on receiver in standby
-            MEMORY_SCENE3                  0x5EA1609E
-# Will turn on receiver in standby
-            MEMORY_SCENE4                  0x5EA1906E
             MEMORY_MEMORY                  0xFE80E618
             VOLUME_MUTE                    0x5EA138C7
             VOLUME_VOLUME-                 0x5EA1D827
@@ -202,16 +139,14 @@ begin remote
             INPUT_AV4                      0x5EA13AC4
             INPUT_AV5                      0x5EA1FA04
             INPUT_AV6                      0x5EA146B8
-            INPUT_AV7                      0x5EA16E90
-            INPUT_VAUX                     0x5EA19E60
             INPUT_DOCK                     0xFE8052AD
+            INPUT_HDMI1                    0x5EA1E21C
+            INPUT_HDMI2                    0x5EA152AC
+            INPUT_HDMI3                    0x5EA1B24C
             INPUT_INPUT-                   0x5EA1C43A
             INPUT_INPUT+                   0x5EA1F806
             INPUT_MULTI_CH_IN              0x5EA1E11E
-            INPUT_NET                      0xFE80FC03
-            INPUT_PHONO                    0x5EA128D7
             INPUT_TUNER                    0x5EA16897
-            INPUT_USB                      0xFE804EB0
             DISPLAY_INFO                   0x5EA1E41A
             DISPLAY_DISPLAY                0xFE8006F9
             NUMBER_0                       0xFE805AA5
@@ -246,7 +181,7 @@ end remote
 
 begin remote
 
-  name  RECEIVER_2067_ZONE2
+  name  RECEIVER_2064_ZONE2
   bits           32
   flags SPACE_ENC|CONST_LENGTH
   eps            30
@@ -262,24 +197,6 @@ begin remote
 
       begin codes
 
-            MEMORY_VOLUME_MEMORY1          0x7E81E11E
-            MEMORY_VOLUME_MEMORY2          0x7E8111EE
-            MEMORY_VOLUME_MEMORY3          0x7E81916E
-            MEMORY_VOLUME_MEMORY4          0x7E8151AE
-            MEMORY_VOLUME_MEMORY5          0x7E81D12E
-            MEMORY_VOLUME_MEMORY6          0x7E8131CE
-            MEMORY_VOLUME_RECALL1          0x7E81B14E
-            MEMORY_VOLUME_RECALL2          0x7E81718E
-            MEMORY_VOLUME_RECALL3          0x7E81F10E
-            MEMORY_VOLUME_RECALL4          0x7E8109F6
-            MEMORY_VOLUME_RECALL5          0x7E818976
-            MEMORY_VOLUME_RECALL6          0x7E8149B6
-            PROGRAM_BALANCE_LEFT           0x7E812BD4
-            PROGRAM_BALANCE_RIGHT          0x7E81AB54
-            PROGRAM_BASS-                  0x5EA12ED1
-            PROGRAM_BASS+                  0x5EA1CE31
-            PROGRAM_TREBLE-                0x5EA16E91
-            PROGRAM_TREBLE+                0x5EA1AE51
             VOLUME_MUTE_OFF                0x7E81857A
             VOLUME_MUTE_ON_-20DB           0x7E81946A
             VOLUME_MUTE_ON_-40DB           0x7E8126D8
@@ -288,39 +205,17 @@ begin remote
             POWER_SLEEP_OFF                0x7E8138C6
             POWER_SLEEP_ON                 0x7E81E816
             POWER_STANDBY                  0x7E81DD22
-            MEMORY_SCENE1                  0x5EA1807E
-            MEMORY_SCENE2                  0x5EA120DE
-            MEMORY_SCENE3                  0x5EA1E01E
-            MEMORY_SCENE4                  0x5EA150AE
             VOLUME_MUTE                    0x5EA13BC4
             VOLUME_VOLUME-                 0x5EA1DB24
             VOLUME_VOLUME+                 0x5EA15BA4
-            MENU_DOWN                      0x5EA134CA
-            MENU_ENTER                     0x5EA1F40A
-            MENU_LEFT                      0x5EA1B44A
-            MENU_RETURN                    0x5EA13CC2
-            MENU_RIGHT                     0x5EA1748A
-            MENU_OPTION                    0x5EA136C8
-            MENU_UP                        0x5EA1D42A
             POWER_POWER_ON_STANDBY         0x5EA1A25C
             POWER_SLEEP                    0x5EA18C73
             INPUT_AUDIO1                   0x5EA16698
             INPUT_AUDIO2                   0x5EA19668
-            INPUT_AUDIO3                   0x5EA1BE40
-            INPUT_AUDIO4                   0x5EA101FF
-            INPUT_AV1                      0x5EA12AD4
-            INPUT_AV2                      0x5EA1EA14
-            INPUT_AV3                      0x5EA15AA4
-            INPUT_AV4                      0x5EA1BA44
-            INPUT_VAUX                     0x5EA15EA0
             INPUT_DOCK                     0xFE80D22D
             INPUT_INPUT-                   0x5EA124DA
             INPUT_INPUT+                   0x5EA104FA
-            INPUT_NET                      0xFE8002FD
-            INPUT_PHONO                    0x5EA10BF4
             INPUT_TUNER                    0x5EA14BB4
-            INPUT_USB                      0xFE80CE30
-            DISPLAY_DISPLAY                0xFE8001FE
             NUMBER_0                       0xFE805EA1
             NUMBER_1                       0xFE808E71
             NUMBER_2                       0xFE804EB1
