@@ -3,6 +3,12 @@
 # Short-Description: Automatically control amp.
 # Description:       Automatically sends turn on to amp and select hdmi input 1 when starting playing music.
 ### END INIT INFO
+
+# To install:
+# sudo mv turn_on_amp_service /etc/init.d/turn_on_amp_service
+# sudo chmod 755 /etc/init.d/turn_on_amp_service
+# sudo update-rc.d turn_on_amp_service defaults
+
 get_is_playing(){
     STATUS=$(curl http://127.0.0.1:3000/api/v1/getstate 2> /dev/null);
     STATUS=$(echo $STATUS | grep play);
