@@ -6,9 +6,12 @@ import os.path
 import argparse
 import subprocess
 
+import paho.mqtt.publish as publish
 import paho.mqtt.client as mqtt
-import urllib.request as request
-
+try:
+    import urllib.request as request
+except:
+    import urllib2 as request
 # The callback for when the client receives a CONNACK response from the server.
 
 DEFAULT_MQTT_BROKER_HOST = "192.168.1.101"
@@ -37,6 +40,14 @@ def main():
     write_topic = os.path.join(root_topic, "out")
 
 
+    if args.send is not None:
+        publish.single(write_topic,
+                       payload=" ".join(args.send),
+                       hostname=mqtt_broker_host,
+                       port=mqtt_broker_port)
+        exit(0)
+
+
     def on_connect(client, userdata, flags, rc):
         print("Connected with result code " + str(rc))
         client.subscribe(read_topic)
@@ -50,36 +61,35 @@ def main():
     def on_message(client, userdata, msg):
         irsend(msg.payload)
 
+    def on_publish(client, userdata, mid):
+        pass
+
 
     client = initialize_connection(mqtt_broker_host, mqtt_broker_port)
     client.on_connect = on_connect
     client.on_message = on_message
     client.on_disconnect = on_disconnect
+    client.on_publish = on_publish
     client.loop_start()
 
     was_playing = False
     is_playing = False
 
-    if args.send is not None:
-        client.publish(write_topic, *args.send)
+    while True:
+        was_playing = is_playing
+        is_playing = get_is_playing()
+        started_playing = not was_playing and is_playing
+        stopped_playing = was_playing and not is_playing
 
-    else:
-        while True:
-            was_playing = is_playing
-            is_playing = get_is_playing()
-            started_playing = not was_playing and is_playing
-            stopped_playing = was_playing and not is_playing
-
-            if started_playing:
-                set_receiver_input()
-                client.publish(write_topic, "playing")
-            if stopped_playing:
-                client.publish(write_topic, "stopped")
+        if started_playing:
+            set_receiver_input()
+            client.publish(write_topic, "playing")
+        if stopped_playing:
+            client.publish(write_topic, "stopped")
 
 
-            time.sleep(0.1)
+        time.sleep(0.1)
 
-    client.disconnect()
 
 def initialize_connection(host, port):
     is_network_accessable = False
@@ -94,7 +104,7 @@ def initialize_connection(host, port):
             time.sleep(1)
 
 def irsend(command):
-    subproc = subprocess.Popen([COMMAND, *command.split()])
+    subproc = subprocess.Popen([COMMAND] +  command.split())
     output = subproc.communicate()[0]
     return output
 
