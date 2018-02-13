@@ -1,5 +1,10 @@
 #!/bin/bash
 ### BEGIN INIT INFO
+# Provides:          --
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
 # Short-Description: Automatically control amp.
 # Description:       Automatically sends turn on to amp and select hdmi input 1 when starting playing music.
 ### END INIT INFO
@@ -16,6 +21,8 @@ get_is_playing(){
     IS_PLAYING=$(($IS_PLAYING > 10 ? 1 : 0))
     echo $IS_PLAYING
 }
+
+get_is_playing
 
 was_playing=0
 is_playing=0
