@@ -18,6 +18,8 @@ DEFAULT_MQTT_BROKER_HOST = "192.168.1.101"
 DEFAULT_MQTT_BROKER_PORT = 1883
 HOSTNAME = socket.gethostname()
 COMMAND = "irsend"
+TIME_TO_INACTIVE = 120.0 # sec
+DELTA_TIME_PLAYING_STATUS = 0.1
 #DEFAULT_ROOT_TOPIC = "/raw/esp8266/blinds_7622132"
 DEFAULT_ROOT_TOPIC = "/raw/receivers/" + HOSTNAME
 
@@ -38,6 +40,7 @@ def main():
     root_topic = args.topic
     read_topic = os.path.join(root_topic, "in")
     write_topic = os.path.join(root_topic, "out")
+    inactive_timesteps = 0
 
 
     if args.send is not None:
@@ -87,8 +90,15 @@ def main():
         if stopped_playing:
             client.publish(write_topic, "stopped")
 
+        if not is_playing:
+            inactive_timesteps += 1
+            if inactive_timesteps > TIME_TO_INACTIVE / DELTA_TIME_PLAYING_STATUS:
+                client.publish(write_topic, "inactive")
+                inactive_timesteps = -10000
+        else:
+            inactive_timesteps = 0
 
-        time.sleep(0.1)
+        time.sleep(DELTA_TIME_PLAYING_STATUS)
 
 
 def initialize_connection(host, port):
@@ -109,9 +119,12 @@ def irsend(command):
     return output
 
 def get_is_playing():
-    status = str(request.urlopen("http://127.0.0.1:3000/api/v1/getstate").read()).find("play")
-    is_playing = status is not -1
-    return is_playing
+    try:
+        status = str(request.urlopen("http://127.0.0.1:3000/api/v1/getstate").read()).find("play")
+        is_playing = status is not -1
+        return is_playing
+    except:
+        return False
 
 def set_receiver_input():
     irsend("SEND_ONCE RECEIVER_2064_MAIN POWER_POWER_ON")
