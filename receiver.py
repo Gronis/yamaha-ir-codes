@@ -17,7 +17,7 @@ except:
 DEFAULT_MQTT_BROKER_HOST = "192.168.1.101"
 DEFAULT_MQTT_BROKER_PORT = 1883
 HOSTNAME = socket.gethostname()
-COMMAND = "echo"
+COMMAND = "irsend"
 #DEFAULT_ROOT_TOPIC = "/raw/esp8266/blinds_7622132"
 DEFAULT_ROOT_TOPIC = "/raw/receivers/" + HOSTNAME
 
@@ -109,7 +109,7 @@ def irsend(command):
     return output
 
 def get_is_playing():
-    status = str(request.urlopen("http://192.168.1.120:3000/api/v1/getstate").read()).find("play")
+    status = str(request.urlopen("http://127.0.0.1:3000/api/v1/getstate").read()).find("play")
     is_playing = status is not -1
     return is_playing
 

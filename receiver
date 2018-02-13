@@ -1,6 +1,6 @@
 #!/bin/bash
 ### BEGIN INIT INFO
-# Provides:          receiveir
+# Provides:          receiver
 # Required-Start:    $remote_fs $syslog
 # Required-Stop:     $remote_fs $syslog
 # Default-Start:     2 3 4 5
@@ -14,19 +14,13 @@
 # sudo chmod 755 /etc/init.d/turn_on_amp_service
 # sudo update-rc.d turn_on_amp_service defaults
 
-#!/bin/bash
-# myapp daemon
-# chkconfig: 345 20 80
-# description: myapp daemon
-# processname: myapp
+DAEMON_PATH="/home/volumio/yamaha-ir-codes"
 
-DAEMON_PATH="~/yamaha-ir-codes"
-
-DAEMON="receiveir.py"
+DAEMON="./receiver.py"
 DAEMONOPTS=""
 
 NAME=receiver
-DESC="receiveir is a service to control a ir device through mqtt using sendir"
+DESC="receiver is a service to control a ir device through mqtt using sendir"
 PIDFILE=/var/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
 
