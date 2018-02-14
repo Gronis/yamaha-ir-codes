@@ -105,12 +105,9 @@ def connect(client, host, port):
         try:
             client.connect(host, port, 60)
             reconnected = True
-        except ConnectionRefusedError:
-            print("Connection Refused, trying again...")
-            time.sleep(1)
-        except OSError:
-            print("Network Unavailable, trying again...")
-            time.sleep(1)
+        except:
+            print("Unable to connect, trying again...")
+        time.sleep(1)
 
 def irsend(command):
     subproc = subprocess.Popen([COMMAND] +  command.split())
