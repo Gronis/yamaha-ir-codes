@@ -57,9 +57,7 @@ def main():
 
 
     def on_disconnect(client, userdata, rc):
-        time.sleep(1)
-        client.connect(mqtt_broker_host, mqtt_broker_port, 60)
-
+        connect(client, mqtt_broker_host, mqtt_broker_port)
 
     def on_message(client, userdata, msg):
         irsend(msg.payload)
@@ -67,8 +65,8 @@ def main():
     def on_publish(client, userdata, mid):
         pass
 
-
-    client = initialize_connection(mqtt_broker_host, mqtt_broker_port)
+    client =  mqtt.Client()
+    connect(client, mqtt_broker_host, mqtt_broker_port)
     client.on_connect = on_connect
     client.on_message = on_message
     client.on_disconnect = on_disconnect
@@ -100,17 +98,18 @@ def main():
 
         time.sleep(DELTA_TIME_PLAYING_STATUS)
 
-
-def initialize_connection(host, port):
-    is_network_accessable = False
-    while not is_network_accessable:
+# Connects the client. If fails due to host being down or localhost network is down, retry
+def connect(client, host, port):
+    reconnected = False
+    while not reconnected:
         try:
-            client = mqtt.Client()
             client.connect(host, port, 60)
-            is_network_accessable = True
-            return client
-        except OSError as e:
-            print(e)
+            reconnected = True
+        except ConnectionRefusedError:
+            print("Connection Refused, trying again...")
+            time.sleep(1)
+        except OSError:
+            print("Network Unavailable, trying again...")
             time.sleep(1)
 
 def irsend(command):
