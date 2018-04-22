@@ -14,7 +14,7 @@ except:
     import urllib2 as request
 # The callback for when the client receives a CONNACK response from the server.
 
-DEFAULT_MQTT_BROKER_HOST = "192.168.1.101"
+DEFAULT_MQTT_BROKER_HOST = "192.168.1.102"
 DEFAULT_MQTT_BROKER_PORT = 1883
 HOSTNAME = socket.gethostname()
 COMMAND = "irsend"
@@ -53,6 +53,7 @@ def main():
 
     def on_connect(client, userdata, flags, rc):
         print("Connected with result code " + str(rc))
+        print("MQTT Topic: {}, Connected to {}".format(root_topic, mqtt_broker_host))
         client.subscribe(read_topic)
 
 
@@ -60,6 +61,7 @@ def main():
         connect(client, mqtt_broker_host, mqtt_broker_port)
 
     def on_message(client, userdata, msg):
+        print(msg.payload)
         irsend(msg.payload)
 
     def on_publish(client, userdata, mid):
