@@ -41,8 +41,9 @@ def main():
                        port=mqtt_broker_port)
         exit(0)
 
-    cec_client = CecClient()
+    log_level = cec.CEC_LOG_TRAFFIC
     mqtt_client = mqtt.Client()
+    cec_client = CecClient()
 
     def on_mqtt_connect(client, userdata, flags, rc):
         if rc is 0:
@@ -54,14 +55,20 @@ def main():
         mqtt_connect(client, mqtt_broker_host, mqtt_broker_port)
 
     def on_mqtt_message(client, userdata, msg):
-        cmd = str(msg.payload.decode("utf-8"))
-        print(cmd)
-        action, value = cmd.split()
-        {
-            "on": cec_client.power_on,
-            "standby": cec_client.standby,
-            "tx": cec_client.send_command,
-        }[action](value)
+        try:
+            cmd = str(msg.payload.decode("utf-8"))
+            if len(cmd.split()) >= 1:
+                print("received {} from mqtt broker".format(cmd))
+                action, *args = cmd.split()
+                {
+                    "on": cec_client.power_on,
+                    "standby": cec_client.standby,
+                    "tx": cec_client.send_command,
+                }[action](*args)
+            else:
+                print("unknown command {} received from mqtt broker".format(cmd))        
+        except Exception as e:
+            print(e)
 
     def on_mqtt_publish(client, userdata, mid):
         pass
@@ -73,7 +80,36 @@ def main():
         client.on_disconnect = on_mqtt_disconnect
         client.on_publish = on_mqtt_publish
 
-    cec_client.connect()
+    def on_cec_log(level, time, message):
+        if level > log_level:
+            return 0
+
+        if level == cec.CEC_LOG_ERROR:
+            levelstr = "ERROR:   "
+        elif level == cec.CEC_LOG_WARNING:
+            levelstr = "WARNING: "
+        elif level == cec.CEC_LOG_NOTICE:
+            levelstr = "NOTICE:  "
+        elif level == cec.CEC_LOG_TRAFFIC:
+            levelstr = "TRAFFIC: "
+        elif level == cec.CEC_LOG_DEBUG:
+            levelstr = "DEBUG:   "
+
+        print(levelstr + "[" + str(time) + "]     " + message)
+        return 0
+
+    def on_cec_command(cmd):
+        cmd = cmd.replace(">> ", "")
+        mqtt_client.publish(write_topic, cmd)
+        print("[command received] " + cmd)
+        return 0
+
+    def setup_cec_client(client):
+        client.on_log = on_cec_log
+        client.on_command = on_cec_command
+        client.connect()
+
+    setup_cec_client(cec_client)
     setup_mqtt_client(mqtt_client)
 
     # Lock main thread
@@ -92,6 +128,15 @@ def mqtt_connect(client, host, port):
 
 class CecClient:
     def __init__(self):
+        pass
+
+    def on_log(self, level, time, message):
+        pass
+
+    def on_command(self, cmd):
+        pass
+
+    def connect(self):
         self.cecconfig = cec.libcec_configuration()
         self.cecconfig.strDeviceName = "mqtt_cec"
         self.cecconfig.bActivateSource = 0
@@ -99,10 +144,16 @@ class CecClient:
         self.cecconfig.clientVersion = cec.LIBCEC_VERSION_CURRENT
 
         def log_callback(level, time, message):
-            return self.log_callback(level, time, message)
+            try:
+                return self.on_log(level, time, message)
+            except Exception as e:
+                print(e)
 
         def command_callback(cmd):
-            return self.command_callback(cmd)
+            try:
+                return self.on_command(cmd)
+            except Exception as e:
+                print(e)
 
         self.cecconfig.SetLogCallback(log_callback)
         self.cecconfig.SetCommandCallback(command_callback)
@@ -110,8 +161,6 @@ class CecClient:
         self.lib = cec.ICECAdapter.Create(self.cecconfig)
         self.log_level = cec.CEC_LOG_TRAFFIC
         print("libCEC version " + self.lib.VersionToString(self.cecconfig.serverVersion) + " loaded: " + self.lib.GetLibInfo())
-
-    def connect(self):
         adapter = self.detect_adapter()
         if adapter == None:
             print("No adapters found")
@@ -135,41 +184,25 @@ class CecClient:
         return res
 
     def standby(self, device):
+        device = device if device is not "f" else cec.CECDEVICE_BROADCAST
         self.lib.StandbyDevices(int(device))
 
     def power_on(self, device):
+        device = device if device is not "f" else cec.CECDEVICE_BROADCAST
         self.lib.PowerOnDevices(int(device))
 
-    def send_command(self, data):
+    def send_command(self, data, retries=0):
+        retries = int(retries)
+        if retries < 0:
+            print("failed too many times, skipping transmit of " + data)
+            return
         cmd = self.lib.CommandFromString(data)
         print("transmit " + data)
         if not self.lib.Transmit(cmd):
             print("failed to transmit " + data + ", retrying...")
-            #time.sleep(1)
-            #self.send_command(data)
+            time.sleep(0.2)
+            self.send_command(data, retries - 1)
         else:
             print("success")
-
-    def log_callback(self, level, time, message):
-        if level > self.log_level:
-            return 0
-
-        if level == cec.CEC_LOG_ERROR:
-            levelstr = "ERROR:   "
-        elif level == cec.CEC_LOG_WARNING:
-            levelstr = "WARNING: "
-        elif level == cec.CEC_LOG_NOTICE:
-            levelstr = "NOTICE:  "
-        elif level == cec.CEC_LOG_TRAFFIC:
-            levelstr = "TRAFFIC: "
-        elif level == cec.CEC_LOG_DEBUG:
-            levelstr = "DEBUG:   "
-
-        print(levelstr + "[" + str(time) + "]     " + message)
-        return 0
-
-    def command_callback(self, cmd):
-        print("[command received] " + cmd)
-        return 0
 
 main()
