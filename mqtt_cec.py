@@ -5,6 +5,7 @@ import time
 import os.path
 import argparse
 import subprocess
+import threading
 
 import paho.mqtt.publish as publish
 import paho.mqtt.client as mqtt
@@ -101,7 +102,7 @@ def main():
     def on_cec_command(cmd):
         cmd = cmd.replace(">> ", "")
         mqtt_client.publish(write_topic, cmd)
-        print("[command received] " + cmd)
+        print("[Sending CEC message through mqtt] " + cmd)
         return 0
 
     def setup_cec_client(client):
@@ -193,15 +194,14 @@ class CecClient:
 
     def send_command(self, data, retries=0):
         retries = int(retries)
-        if retries < 0:
-            print("failed too many times, skipping transmit of " + data)
-            return
         cmd = self.lib.CommandFromString(data)
         print("transmit " + data)
-        if not self.lib.Transmit(cmd):
+        if not self.lib.Transmit(cmd) and retries > 0:
             print("failed to transmit " + data + ", retrying...")
-            time.sleep(0.2)
-            self.send_command(data, retries - 1)
+            #time.sleep(0.2)
+            thread = threading.Timer(0.2, lambda: self.send_command(data, retries - 1))
+            thread.start()
+            #self.send_command(data, retries - 1)
         else:
             print("success")
 
